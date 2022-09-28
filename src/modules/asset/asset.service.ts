@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import config from '../../config/config';
 import Asset from './asset.model';
 import { IOptions, QueryResult } from '../paginate/paginate';
 import { IAsset } from './asset.interfaces';
@@ -42,15 +43,52 @@ export async function fetchAssets(contractAddrs: string[], chain: string) {
   const allNfts = results.map((r) => r.result).reduce((acc, val) => acc.concat(val), []);
   return allNfts;
 }
+// const gnfts: any[] = [];
+
+// async function recurse(url: string, baseUrl: string) {
+//   const nfts = await axiosFetchJSON<any>(url);
+//   // eslint-disable-next-line no-console
+//   console.count('recurse');
+//   gnfts.push(...nfts.result);
+//   if (nfts.cursor) {
+//     // eslint-disable-next-line no-param-reassign
+//     url = baseUrl.concat(`&cursor=${nfts.cursor}`);
+//     recurse(url, baseUrl);
+//   } else {
+//     logger.info(gnfts.length);
+//     // logger.info(JSON.stringify(gnfts, null, 2));
+//     Asset.insertMany(gnfts);
+//     return 'Successfuly populated';
+//   }
+// }
 
 export const populateAssets = async (): Promise<any> => {
-  const nfts = await fetchAssets(
-    ['0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2', '0xe14fa5FbA1b55946F2fa78eA3Bd20B952FA5F34E'],
-    'goerli'
-  );
+  const contracts = config.contracts.addresses;
+  const nfts = await fetchAssets(contracts, 'goerli');
   if (nfts.length === 0) {
     throw new ApiError(httpStatus.NOT_FOUND, 'No Nfts Found');
   }
   Asset.insertMany(nfts);
   return 'Successfuly populated';
 };
+
+export const fetchAddressNfts = async (address: string, contractAddrs: string[], chain: string) => {
+  logger.info(address);
+
+  let url = `https://deep-index.moralis.io/api/v2/${address}/nft?chain=${chain}&format=decimal`;
+
+  const empty = '';
+  const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
+
+  url = url.concat(contractAddrsUrlString);
+  logger.info(url);
+  const nfts = await axiosFetchJSON<any>(url);
+  logger.info(JSON.stringify(nfts, null, 2));
+
+  return nfts.result;
+};
+
+// recurse(
+//   'https://deep-index.moralis.io/api/v2/nft/0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd?chain=goerli&format=decimal',
+//   'https://deep-index.moralis.io/api/v2/nft/0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd?chain=goerli&format=decimal'
+// );

@@ -40,7 +40,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     },
     token_uri: {
       type: String,
-      required: true,
+      required: false,
     },
     metadata: {
       type: String,
@@ -48,11 +48,11 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     },
     last_token_uri_sync: {
       type: String,
-      required: true,
+      required: false,
     },
     last_metadata_sync: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

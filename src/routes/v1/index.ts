@@ -1,5 +1,7 @@
 import express, { Router } from 'express';
 import assetRoute from './asset.route';
+import collectionRoute from './collection.route';
+
 // import config from '../../config/config';
 
 const router = express.Router();
@@ -13,6 +15,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/assets',
     route: assetRoute,
+  },
+  {
+    path: '/collections',
+    route: collectionRoute,
   },
 ];
 

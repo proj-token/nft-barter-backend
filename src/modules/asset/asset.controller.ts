@@ -36,11 +36,24 @@ export const populateAssets = catchAsync(async (_req: Request, res: Response) =>
 export const getAddressNfts = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.params['address'] === 'string') {
     const { address } = req.params;
-    const nfts = await assetService.fetchAddressNfts(address, config.contracts.addresses, config.network);
+    const nfts = await assetService.fetchAddressNfts(address, config.contracts.nftAddresses, config.network);
     if (!nfts) {
       throw new ApiError(httpStatus.NOT_FOUND, 'nfts not found');
     }
     res.send(nfts);
+  } else {
+    res.status(400).send(httpStatus.BAD_REQUEST);
+  }
+});
+
+export const getAddressErc20 = catchAsync(async (req: Request, res: Response) => {
+  if (typeof req.params['address'] === 'string') {
+    const { address } = req.params;
+    const tokens = await assetService.fetchAddressErc20(address, config.contracts.erc20Addresses, config.network);
+    if (!tokens) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'erc20 not found');
+    }
+    res.send(tokens);
   } else {
     res.status(400).send(httpStatus.BAD_REQUEST);
   }

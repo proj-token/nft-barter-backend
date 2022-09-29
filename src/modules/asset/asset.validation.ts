@@ -19,7 +19,7 @@ export const getAssetById = {
   }),
 };
 
-export const getOwnerNfts = {
+export const getOwnerTokens = {
   params: Joi.object().keys({
     address: Joi.string().required(),
   }),

@@ -2,14 +2,14 @@ import { Model } from 'mongoose';
 import { QueryResult } from '../paginate/paginate';
 
 export interface IAsset {
-  token_hash: string | null;
-  token_address: string | null;
-  token_id: string | null;
-  block_number_minted: string | null;
-  amount: string | null;
-  contract_type: string | null;
-  name: string | null;
-  symbol: string | null;
+  token_hash: string;
+  token_address: string;
+  token_id: string;
+  block_number_minted: string;
+  amount: string;
+  contract_type: string;
+  name: string;
+  symbol: string;
   token_uri: string | null;
   metadata: string | null;
   last_token_uri_sync: string | null;

@@ -1,9 +1,8 @@
-import httpStatus from 'http-status';
+import config from '../../config/config';
 import Asset from './asset.model';
 import { IOptions, QueryResult } from '../paginate/paginate';
 import { IAsset } from './asset.interfaces';
 import { axiosFetchJSON } from '../utils/axios';
-import { ApiError } from '../errors';
 import { logger } from '../logger';
 
 /**
@@ -21,36 +20,64 @@ export const queryAssets = async (filter: Record<string, any>, options: IOptions
  * Get asset by token_id and contract_address
  */
 export const getAssetByTokenId = async (token_address: string, token_id: string): Promise<IAsset | null> => {
-  logger.info(token_address);
-  logger.info(token_id);
   return Asset.findOne({ token_address, token_id }).exec();
 };
 
-export async function fetchAssets(contractAddrs: string[], chain: string) {
-  const requests = contractAddrs.map(
-    (address) => `https://deep-index.moralis.io/api/v2/nft/${address}?chain=${chain}&format=decimal`
-  );
-
-  const pending = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const url of requests) {
-    const nfts = axiosFetchJSON<any>(url);
-    pending.push(nfts);
+async function fetchRecursive(url: string, baseUrl: string, accumulator: any[]) {
+  const nfts = await axiosFetchJSON<any>(url);
+  accumulator.push(...nfts.result);
+  if (nfts.cursor) {
+    // eslint-disable-next-line no-param-reassign
+    url = baseUrl.concat(`&cursor=${nfts.cursor}`);
+    fetchRecursive(url, baseUrl, accumulator);
+  } else {
+    Asset.insertMany(accumulator);
   }
-  const results = await Promise.all(pending);
 
-  const allNfts = results.map((r) => r.result).reduce((acc, val) => acc.concat(val), []);
-  return allNfts;
+  return 1;
 }
 
 export const populateAssets = async (): Promise<any> => {
-  const nfts = await fetchAssets(
-    ['0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2', '0xe14fa5FbA1b55946F2fa78eA3Bd20B952FA5F34E'],
-    'goerli'
+  const count = await Asset.estimatedDocumentCount();
+  if (count > 0) return; // Already populated
+  const contracts = config.contracts.nftAddresses;
+  const requests = contracts.map(
+    (address) => `https://deep-index.moralis.io/api/v2/nft/${address}?chain=${config.network}&format=decimal`
   );
-  if (nfts.length === 0) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'No Nfts Found');
+  try {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const url of requests) {
+      // eslint-disable-next-line no-await-in-loop
+      await fetchRecursive(url, url, []);
+    }
+  } catch (error) {
+    logger.error(error);
+    throw new Error('Assets population Failed ');
   }
-  Asset.insertMany(nfts);
-  return 'Successfuly populated';
+};
+
+export const fetchAddressNfts = async (address: string, contractAddrs: string[], chain: string) => {
+  let url = `https://deep-index.moralis.io/api/v2/${address}/nft?chain=${chain}&format=decimal`;
+  const empty = '';
+  const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
+  url = url.concat(contractAddrsUrlString);
+  const nfts = await axiosFetchJSON<any>(url);
+
+  return nfts.result;
+};
+
+export const fetchAddressErc20 = async (address: string, contractAddrs: string[], chain: string) => {
+  let url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chain}&format=decimal`;
+  const empty = '';
+  const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
+  url = url.concat(contractAddrsUrlString);
+  const tokens = await axiosFetchJSON<any>(url);
+  return tokens;
+};
+
+export const fetchNftOwners = async (contractAddress: string, chain: string, cursor?: string) => {
+  let url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/owners?chain=${chain}&format=decimal`;
+  if (cursor) url = `${url}&cursor=${cursor}`;
+  const nftList = await axiosFetchJSON<any>(url);
+  return nftList;
 };

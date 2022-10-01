@@ -24,3 +24,12 @@ export const getOwnerTokens = {
     address: Joi.string().required(),
   }),
 };
+
+export const getNftOwner = {
+  params: Joi.object().keys({
+    address: Joi.string().required(),
+  }),
+  query: Joi.object().keys({
+    cursor: Joi.string(),
+  }),
+};

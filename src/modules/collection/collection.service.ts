@@ -13,6 +13,7 @@ export const queryCollections = async (filter: Record<string, any>, options: IOp
 };
 
 export const populateAssetCollections = async (): Promise<any> => {
+  const count = await Collection.estimatedDocumentCount();
+  if (count > 0) return; // Already populated
   Collection.insertMany(seedData.collections);
-  return 'Successfuly populated';
 };

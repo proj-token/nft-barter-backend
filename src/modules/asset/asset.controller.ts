@@ -28,11 +28,6 @@ export const getAssetById = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
-export const populateAssets = catchAsync(async (_req: Request, res: Response) => {
-  const result = await assetService.populateAssets();
-  res.send(result);
-});
-
 export const getAddressNfts = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.params['address'] === 'string') {
     const { address } = req.params;
@@ -54,6 +49,23 @@ export const getAddressErc20 = catchAsync(async (req: Request, res: Response) =>
       throw new ApiError(httpStatus.NOT_FOUND, 'erc20 not found');
     }
     res.send(tokens);
+  } else {
+    res.status(400).send(httpStatus.BAD_REQUEST);
+  }
+});
+
+export const getNftOwners = catchAsync(async (req: Request, res: Response) => {
+  if (
+    typeof req.params['address'] === 'string' &&
+    (typeof req.query['cursor'] === 'string' || typeof req.query['cursor'] === 'undefined')
+  ) {
+    const { address } = req.params;
+    const { cursor } = req.query;
+    const nftList = await assetService.fetchNftOwners(address, config.network, cursor);
+    if (!nftList) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'nfts not found');
+    }
+    res.send(nftList);
   } else {
     res.status(400).send(httpStatus.BAD_REQUEST);
   }

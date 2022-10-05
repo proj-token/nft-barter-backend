@@ -19,3 +19,15 @@ export interface IAsset {
 export interface IAssetModel extends Model<IAsset> {
   paginate(filter: Record<string, any>, options: Record<string, any>): Promise<QueryResult>;
 }
+
+export interface Token {
+  // The asset's token ID, or null if ERC-20
+  token_id: string | null;
+  // The asset's contract address
+  token_address: string;
+  type: 'ERC721' | 'ERC20';
+  // Optional for fungible items
+  decimals?: number;
+  // Always 1 for erc721
+  amount: string;
+}

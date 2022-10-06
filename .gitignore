@@ -13,3 +13,5 @@ coverage
 
 # bunlde folder
 dist
+
+.vscode

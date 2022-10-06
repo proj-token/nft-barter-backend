@@ -3,7 +3,7 @@ import { NewCreateOrder, OrderType, Status } from './order.interfaces';
 
 const orderSchema = Joi.object().keys({
   registry: Joi.string().alphanum().min(42).max(42).required(),
-  maker: Joi.string().alphanum().min(42).max(42).required(),
+  maker: Joi.string().alphanum().required(),
   staticTarget: Joi.string().alphanum().min(42).max(42).required(),
   staticSelector: Joi.string().required(),
   staticExtradata: Joi.string().required(),
@@ -43,7 +43,10 @@ const createOrderBody: Record<keyof NewCreateOrder, any> = {
   counterCall: callSchema,
   metadata: Joi.string().required(),
   type: Joi.string().valid(OrderType.Basic, OrderType.Mixed).required(),
-  tokens: Joi.array().items(tokenSchema).min(2).required(),
+  tokens: Joi.object().keys({
+    maker: Joi.array().items(tokenSchema).min(1).required(),
+    taker: Joi.array().items(tokenSchema).min(1).required(),
+  }),
 };
 
 export const createOrder = {

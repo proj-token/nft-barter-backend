@@ -31,7 +31,10 @@ export interface IOrder {
   taker: string;
   status: Status;
   type: OrderType;
-  tokens: Token[];
+  tokens: {
+    maker: Token[];
+    taker: Token[];
+  };
 }
 export interface ISubOrder {
   registry: string;

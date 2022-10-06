@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema<IOrder, IOrderModel>(
     taker: { type: String, required: true, trim: true, default: '0x' },
     status: { type: String, required: true, enum: Status, default: Status.Active },
     type: { type: String, required: true, enum: OrderType, default: OrderType.Basic },
-    tokens: [tokenSchema],
+    tokens: { taker: [tokenSchema], maker: [tokenSchema] },
   },
   {
     timestamps: true,

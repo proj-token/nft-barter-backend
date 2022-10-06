@@ -29,9 +29,13 @@ export const getAssetById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getAddressNfts = catchAsync(async (req: Request, res: Response) => {
-  if (typeof req.params['address'] === 'string') {
+  if (
+    typeof req.params['address'] === 'string' &&
+    (typeof req.query['cursor'] === 'string' || typeof req.query['cursor'] === 'undefined')
+  ) {
     const { address } = req.params;
-    const nfts = await assetService.fetchAddressNfts(address, config.contracts.nftAddresses, config.network);
+    const { cursor } = req.query;
+    const nfts = await assetService.fetchAddressNfts(address, config.contracts.nftAddresses, config.network, cursor);
     if (!nfts) {
       throw new ApiError(httpStatus.NOT_FOUND, 'nfts not found');
     }
@@ -42,9 +46,13 @@ export const getAddressNfts = catchAsync(async (req: Request, res: Response) => 
 });
 
 export const getAddressErc20 = catchAsync(async (req: Request, res: Response) => {
-  if (typeof req.params['address'] === 'string') {
+  if (
+    typeof req.params['address'] === 'string' &&
+    (typeof req.query['cursor'] === 'string' || typeof req.query['cursor'] === 'undefined')
+  ) {
     const { address } = req.params;
-    const tokens = await assetService.fetchAddressErc20(address, config.contracts.erc20Addresses, config.network);
+    const { cursor } = req.query;
+    const tokens = await assetService.fetchAddressErc20(address, config.contracts.erc20Addresses, config.network, cursor);
     if (!tokens) {
       throw new ApiError(httpStatus.NOT_FOUND, 'erc20 not found');
     }

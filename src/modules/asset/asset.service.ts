@@ -55,28 +55,36 @@ export const populateAssets = async (): Promise<any> => {
     throw new Error('Assets population Failed ');
   }
 };
-
-export const fetchAddressNfts = async (address: string, contractAddrs: string[], chain: string) => {
-  let url = `https://deep-index.moralis.io/api/v2/${address}/nft?chain=${chain}&format=decimal`;
+/**
+ * Fetch nfts of and EOA from given contracts collection
+ * @param address EOA
+ * @param contractAddrs Collections
+ * @param chain
+ * @returns
+ */
+export const fetchAddressNfts = async (address: string, contractAddrs: string[], chain: string, cursor?: string) => {
+  let url = `https://deep-index.moralis.io/api/v2/${address}/nft?chain=${chain}&format=decimal&limit=20`;
   const empty = '';
   const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
   url = url.concat(contractAddrsUrlString);
+  if (cursor) url = `${url}&cursor=${cursor}`;
   const nfts = await axiosFetchJSON<any>(url);
 
-  return nfts.result;
+  return nfts;
 };
 
-export const fetchAddressErc20 = async (address: string, contractAddrs: string[], chain: string) => {
-  let url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chain}&format=decimal`;
+export const fetchAddressErc20 = async (address: string, contractAddrs: string[], chain: string, cursor?: string) => {
+  let url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chain}&format=decimal&limit=20`;
   const empty = '';
   const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
   url = url.concat(contractAddrsUrlString);
+  if (cursor) url = `${url}&cursor=${cursor}`;
   const tokens = await axiosFetchJSON<any>(url);
   return tokens;
 };
 
 export const fetchNftOwners = async (contractAddress: string, chain: string, cursor?: string) => {
-  let url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/owners?chain=${chain}&format=decimal`;
+  let url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/owners?chain=${chain}&format=decimal&limit=20`;
   if (cursor) url = `${url}&cursor=${cursor}`;
   const nftList = await axiosFetchJSON<any>(url);
   return nftList;

@@ -12,6 +12,7 @@ const collectionSchema = new mongoose.Schema<ICollection, ICollectionModel>(
     address: {
       type: String,
       required: true,
+      uppercase: true,
     },
     imgUrl: {
       type: String,

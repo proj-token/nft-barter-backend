@@ -13,6 +13,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     token_address: {
       type: String,
       required: true,
+      uppercase: true,
     },
     token_id: {
       type: String,

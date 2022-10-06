@@ -65,6 +65,7 @@ const config = {
       '0x7641d1CBE8aD00b90dc8C4cB48300Dfbd48b548E',
       '0x7de36Cb215126ceabF87f39e90d03A8287dc8Ca0',
       '0xBcAEE3B661663F04036af861237e534c818496d2',
+      '0x85B2aeC8F0196AaeD22a03F4cEa9F3719A73f0fD',
     ],
   },
 };

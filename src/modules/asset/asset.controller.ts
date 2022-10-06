@@ -9,6 +9,9 @@ import * as assetService from './asset.service';
 
 export const getAssets = catchAsync(async (req: Request, res: Response) => {
   const filter = pick(req.query, ['token_address', 'name']);
+  if (filter.token_address) {
+    filter.token_address = filter.token_address.toUpperCase();
+  }
   const options: IOptions = pick(req.query, ['sortBy', 'limit', 'page', 'projectBy']);
   const result = await assetService.queryAssets(filter, options);
   res.send(result);
@@ -17,7 +20,7 @@ export const getAssets = catchAsync(async (req: Request, res: Response) => {
 export const getAssetById = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.query['token_id'] === 'string' && typeof req.params['token_address'] === 'string') {
     const tokenId = req.query['token_id'];
-    const tokenAddress = req.params['token_address'];
+    const tokenAddress = req.params['token_address'].toUpperCase();
     const asset = await assetService.getAssetByTokenId(tokenAddress, tokenId);
     if (!asset) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Asset not found');

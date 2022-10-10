@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema<IOrder, IOrderModel>(
     metadata: { type: String, required: true, trim: true },
     taker: { type: String, required: true, trim: true, default: '0x' },
     status: { type: String, required: true, enum: Status, default: Status.Active },
-    type: { type: String, required: true, enum: OrderType, default: OrderType.Basic },
+    type: { type: String, required: true, enum: OrderType, default: OrderType.BasicNft },
     tokens: { taker: [tokenSchema], maker: [tokenSchema] },
   },
   {
@@ -68,7 +68,7 @@ orderSchema.plugin(AutoIncrement, { inc_field: 'orderId' });
 
 // add plugin that converts mongoose to json
 orderSchema.plugin(toJSON);
-orderSchema.plugin(paginate);
+orderSchema.plugin(paginate as any);
 
 const Order = mongoose.model<IOrder, IOrderModel>('Order', orderSchema);
 

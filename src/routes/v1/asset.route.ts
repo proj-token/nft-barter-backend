@@ -9,5 +9,8 @@ router.route('/:token_address').get(validate(assetValidation.getAssetById), asse
 router.route('/nft/:address').get(validate(assetValidation.getOwnerTokens), assetController.getAddressNfts);
 router.route('/erc20/:address').get(validate(assetValidation.getOwnerTokens), assetController.getAddressErc20);
 router.route('/owners/:address').get(validate(assetValidation.getNftOwner), assetController.getNftOwners);
+router
+  .route('/owners/:address/:tokenId')
+  .get(validate(assetValidation.getNftTokenIdOwner), assetController.getNftTokenIdOwner);
 
 export default router;

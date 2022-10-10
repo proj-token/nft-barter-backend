@@ -15,7 +15,8 @@ export enum Status {
 }
 
 export enum OrderType {
-  Basic = 'Basic',
+  BasicNft = 'BasicNft',
+  BasicFt = 'BasicFt',
   Mixed = 'Mixed',
 }
 

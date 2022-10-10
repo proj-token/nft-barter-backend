@@ -81,3 +81,17 @@ export const getNftOwners = catchAsync(async (req: Request, res: Response) => {
     res.status(400).send(httpStatus.BAD_REQUEST);
   }
 });
+
+export const getNftTokenIdOwner = catchAsync(async (req: Request, res: Response) => {
+  if (typeof req.params['address'] === 'string' && typeof req.params['tokenId'] === 'string') {
+    const { address } = req.params;
+    const { tokenId } = req.params;
+    const nftOwner = await assetService.fetchNftTokenIdOwner(address, config.network, tokenId);
+    if (!nftOwner) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'nft not found');
+    }
+    res.send(nftOwner);
+  } else {
+    res.status(400).send(httpStatus.BAD_REQUEST);
+  }
+});

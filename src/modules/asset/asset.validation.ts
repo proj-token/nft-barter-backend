@@ -33,3 +33,10 @@ export const getNftOwner = {
     cursor: Joi.string(),
   }),
 };
+
+export const getNftTokenIdOwner = {
+  params: Joi.object().keys({
+    address: Joi.string().required(),
+    tokenId: Joi.string().required(),
+  }),
+};

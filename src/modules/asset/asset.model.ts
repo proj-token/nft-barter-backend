@@ -63,7 +63,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
 
 // add plugin that converts mongoose to json
 assetSchema.plugin(toJSON);
-assetSchema.plugin(paginate);
+assetSchema.plugin(paginate as any);
 
 const Asset = mongoose.model<IAsset, IAssetModel>('Asset', assetSchema);
 

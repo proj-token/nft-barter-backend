@@ -1,16 +1,16 @@
 // eslint-disable-next-line import/prefer-default-export
 export const collections = [
   {
-    title: 'Atom',
+    title: 'Beanz',
     type: 'ERC721',
     imgUrl: 'img/art-work/c1.png',
-    address: '0x295da1e1d89148f0c6b78388913a630c8bde8f54',
+    address: '0xb4f323cfA8B2c398731b1E32A9299018449079D9',
   },
   {
-    title: 'MyToken',
+    title: 'Doodle',
     type: 'ERC721',
     imgUrl: 'img/art-work/c1.png',
-    address: '0x3bb4b7bdd1e1c1948f4035e11084b08b5a80e0b2',
+    address: '0xE2D8312c7398D65bDf29937EA98cB6Acb7195599',
   },
   {
     title: 'Azuki Copy',
@@ -19,10 +19,16 @@ export const collections = [
     address: '0xa852c97ea3a2d974ece086e7024ee281f246a959',
   },
   {
-    title: 'ZalarFamily',
+    title: 'MyToken',
     type: 'ERC721',
     imgUrl: 'img/art-work/c1.png',
-    address: '0xe14fa5fba1b55946f2fa78ea3bd20b952fa5f34e',
+    address: '0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2',
+  },
+  {
+    title: 'Prophet',
+    type: 'ERC721',
+    imgUrl: 'img/art-work/c1.png',
+    address: '0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd',
   },
   {
     title: 'Neutrons',

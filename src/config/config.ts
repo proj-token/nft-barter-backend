@@ -55,11 +55,11 @@ const config = {
   },
   contracts: {
     nftAddresses: [
-      '0xA852c97ea3a2d974eCe086e7024EE281F246a959',
-      '0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2',
-      '0xe14fa5FbA1b55946F2fa78eA3Bd20B952FA5F34E',
-      '0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd',
-      // '0x6e4c6D9B0930073e958ABd2ABa516b885260b8Ff',
+      '0xb4f323cfA8B2c398731b1E32A9299018449079D9', // Beanz
+      '0xE2D8312c7398D65bDf29937EA98cB6Acb7195599', // Doodle (owned)
+      '0xA852c97ea3a2d974eCe086e7024EE281F246a959', // Azuki copy
+      '0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2', // Mytoken Apes
+      '0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd', // prophet collection
     ],
     erc20Addresses: [
       '0x7641d1CBE8aD00b90dc8C4cB48300Dfbd48b548E',

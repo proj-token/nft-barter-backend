@@ -30,7 +30,7 @@ const collectionSchema = new mongoose.Schema<ICollection, ICollectionModel>(
 
 // add plugin that converts mongoose to json
 collectionSchema.plugin(toJSON);
-collectionSchema.plugin(paginate);
+collectionSchema.plugin(paginate as any);
 
 const Collection = mongoose.model<ICollection, ICollectionModel>('Collection', collectionSchema);
 

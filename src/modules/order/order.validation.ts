@@ -42,7 +42,7 @@ const createOrderBody: Record<keyof NewCreateOrder, any> = {
   counterSig: sigSchema,
   counterCall: callSchema,
   metadata: Joi.string().required(),
-  type: Joi.string().valid(OrderType.Basic, OrderType.Mixed).required(),
+  type: Joi.string().valid(OrderType.BasicNft, OrderType.BasicFt, OrderType.Mixed).required(),
   tokens: Joi.object().keys({
     maker: Joi.array().items(tokenSchema).min(1).required(),
     taker: Joi.array().items(tokenSchema).min(1).required(),

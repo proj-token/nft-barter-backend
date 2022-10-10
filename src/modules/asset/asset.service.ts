@@ -89,3 +89,9 @@ export const fetchNftOwners = async (contractAddress: string, chain: string, cur
   const nftList = await axiosFetchJSON<any>(url);
   return nftList;
 };
+
+export const fetchNftTokenIdOwner = async (contractAddress: string, chain: string, tokenId?: string) => {
+  const url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/${tokenId}/owners?chain=${chain}&format=decimal`;
+  const nftOwner = await axiosFetchJSON<any>(url);
+  return nftOwner;
+};

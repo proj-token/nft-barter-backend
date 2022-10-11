@@ -13,6 +13,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     token_address: {
       type: String,
       required: true,
+      uppercase: true,
     },
     token_id: {
       type: String,
@@ -40,7 +41,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     },
     token_uri: {
       type: String,
-      required: true,
+      required: false,
     },
     metadata: {
       type: String,
@@ -48,11 +49,11 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
     },
     last_token_uri_sync: {
       type: String,
-      required: true,
+      required: false,
     },
     last_metadata_sync: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {
@@ -62,7 +63,7 @@ const assetSchema = new mongoose.Schema<IAsset, IAssetModel>(
 
 // add plugin that converts mongoose to json
 assetSchema.plugin(toJSON);
-assetSchema.plugin(paginate);
+assetSchema.plugin(paginate as any);
 
 const Asset = mongoose.model<IAsset, IAssetModel>('Asset', assetSchema);
 

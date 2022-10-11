@@ -7,6 +7,7 @@ const envVarsSchema = Joi.object()
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     X_API_Key: Joi.string().required().description('Moralis-Api-Key'),
+    NETWORK: Joi.string().required().description('Chain or network'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
@@ -28,6 +29,7 @@ if (error) {
 const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  network: envVars.NETWORK,
   mongoose: {
     url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
     options: {
@@ -52,7 +54,19 @@ const config = {
     key: envVars.X_API_Key,
   },
   contracts: {
-    addressList: envVars.ADDRESS_LIST,
+    nftAddresses: [
+      '0xb4f323cfA8B2c398731b1E32A9299018449079D9', // Beanz
+      '0xE2D8312c7398D65bDf29937EA98cB6Acb7195599', // Doodle (owned)
+      '0xA852c97ea3a2d974eCe086e7024EE281F246a959', // Azuki copy
+      '0x3Bb4B7Bdd1e1C1948f4035E11084b08b5a80E0b2', // Mytoken Apes
+      '0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd', // prophet collection
+    ],
+    erc20Addresses: [
+      '0x7641d1CBE8aD00b90dc8C4cB48300Dfbd48b548E',
+      '0x7de36Cb215126ceabF87f39e90d03A8287dc8Ca0',
+      '0xBcAEE3B661663F04036af861237e534c818496d2',
+      '0x85B2aeC8F0196AaeD22a03F4cEa9F3719A73f0fD',
+    ],
   },
 };
 export default config;

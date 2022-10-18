@@ -1,8 +1,12 @@
-/* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 import config from '../../config/config';
 
-export async function axiosFetchJSON<T>(url: string, headers?: any): Promise<T> {
+interface MoralisHeader {
+  Accept: string;
+  'X-API-Key': string;
+}
+
+async function axiosFetchJSON<T>(url: string, headers?: MoralisHeader): Promise<T> {
   const { data, status } = await axios.get<T>(url, {
     headers: headers ?? {
       Accept: 'application/json',
@@ -14,3 +18,5 @@ export async function axiosFetchJSON<T>(url: string, headers?: any): Promise<T> 
   }
   return data;
 }
+
+export default axiosFetchJSON;

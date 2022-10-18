@@ -1,7 +1,6 @@
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config/config';
-import { logger } from '../logger';
 
 export interface IPayload extends JwtPayload {
   sub: string;
@@ -17,7 +16,6 @@ const jwtStrategy = new JwtStrategy(
   },
   async (payload: IPayload, done) => {
     try {
-      logger.info(JSON.stringify(payload.type, null, 2));
       if (payload.type !== 'JWT') {
         throw new Error('Invalid token type');
       }

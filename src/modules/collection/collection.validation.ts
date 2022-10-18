@@ -1,7 +1,6 @@
 import Joi from 'joi';
 
-// eslint-disable-next-line import/prefer-default-export
-export const getCollections = {
+const validateCollections = {
   query: Joi.object().keys({
     address: Joi.string(),
     type: Joi.string(),
@@ -10,3 +9,5 @@ export const getCollections = {
     page: Joi.number().integer(),
   }),
 };
+
+export default validateCollections;

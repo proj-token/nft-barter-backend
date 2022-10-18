@@ -1,8 +1,8 @@
 import config from '../../config/config';
 import Asset from './asset.model';
 import { IOptions, QueryResult } from '../paginate/paginate';
-import { IAsset } from './asset.interfaces';
-import { axiosFetchJSON } from '../utils/axios';
+import { Erc20Response, IAsset, NftResponse } from './asset.interfaces';
+import axiosFetchJSON from '../utils/axios';
 import { logger } from '../logger';
 
 /**
@@ -24,7 +24,7 @@ export const getAssetByTokenId = async (token_address: string, token_id: string)
 };
 
 async function fetchRecursive(url: string, baseUrl: string, accumulator: any[]) {
-  const nfts = await axiosFetchJSON<any>(url);
+  const nfts = await axiosFetchJSON<NftResponse>(url);
   accumulator.push(...nfts.result);
   if (nfts.cursor) {
     // eslint-disable-next-line no-param-reassign
@@ -45,11 +45,11 @@ export const populateAssets = async (): Promise<any> => {
     (address) => `https://deep-index.moralis.io/api/v2/nft/${address}?chain=${config.network}&format=decimal`
   );
   try {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const url of requests) {
-      // eslint-disable-next-line no-await-in-loop
-      await fetchRecursive(url, url, []);
-    }
+    await Promise.all(
+      requests.map(async (url) => {
+        await fetchRecursive(url, url, []);
+      })
+    );
   } catch (error) {
     logger.error(error);
     throw new Error('Assets population Failed ');
@@ -68,7 +68,7 @@ export const fetchAddressNfts = async (address: string, contractAddrs: string[],
   const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
   url = url.concat(contractAddrsUrlString);
   if (cursor) url = `${url}&cursor=${cursor}`;
-  const nfts = await axiosFetchJSON<any>(url);
+  const nfts = await axiosFetchJSON<NftResponse>(url);
 
   return nfts;
 };
@@ -79,19 +79,19 @@ export const fetchAddressErc20 = async (address: string, contractAddrs: string[]
   const contractAddrsUrlString = contractAddrs.reduce((acc, current) => `${acc}&token_addresses=${current}`, empty);
   url = url.concat(contractAddrsUrlString);
   if (cursor) url = `${url}&cursor=${cursor}`;
-  const tokens = await axiosFetchJSON<any>(url);
+  const tokens = await axiosFetchJSON<Erc20Response[]>(url);
   return tokens;
 };
 
 export const fetchNftOwners = async (contractAddress: string, chain: string, cursor?: string) => {
   let url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/owners?chain=${chain}&format=decimal&limit=20`;
   if (cursor) url = `${url}&cursor=${cursor}`;
-  const nftList = await axiosFetchJSON<any>(url);
+  const nftList = await axiosFetchJSON<NftResponse>(url);
   return nftList;
 };
 
 export const fetchNftTokenIdOwner = async (contractAddress: string, chain: string, tokenId?: string) => {
   const url = `https://deep-index.moralis.io/api/v2/nft/${contractAddress}/${tokenId}/owners?chain=${chain}&format=decimal`;
-  const nftOwner = await axiosFetchJSON<any>(url);
+  const nftOwner = await axiosFetchJSON<NftResponse>(url);
   return nftOwner;
 };

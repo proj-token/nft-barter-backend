@@ -1,7 +1,7 @@
-import * as collectionController from './collection.controller';
+import getCollections from './collection.controller';
 import * as collectiontInterfaces from './collection.interfaces';
 import collection from './collection.model';
 import * as collectionService from './collection.service';
-import * as collectionValidation from './collection.validation';
+import collectionValidation from './collection.validation';
 
-export { collectionController, collectiontInterfaces, collection, collectionService, collectionValidation };
+export { getCollections, collectiontInterfaces, collection, collectionService, collectionValidation };

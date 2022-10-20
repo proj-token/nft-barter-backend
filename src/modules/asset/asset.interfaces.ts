@@ -31,3 +31,40 @@ export interface Token {
   // Always 1 for erc721
   amount: string;
 }
+
+export interface Nft {
+  token_address: string;
+  token_id: string;
+  owner_of: string;
+  block_number: string;
+  block_number_minted: string;
+  token_hash: string;
+  amount: string;
+  contract_type: string;
+  name: string;
+  symbol: string;
+  token_uri: string | null;
+  metadata: string | null;
+  last_token_uri_sync: string | null;
+  last_metadata_sync: string | null;
+}
+
+export type ContractNft = Omit<Nft, 'owner_of' | 'block_number'>;
+
+export interface NftResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  cursor: string | null;
+  result: Nft[] | ContractNft[];
+}
+
+export interface Erc20Response {
+  token_address: string;
+  name: string;
+  symbol: string;
+  logo: string | null;
+  thumbnail: string | null;
+  decimals: number;
+  balance: string;
+}

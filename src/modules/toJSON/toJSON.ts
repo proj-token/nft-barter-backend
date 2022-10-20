@@ -9,7 +9,6 @@ import { Document } from 'mongoose';
 
 const deleteAtPath = (obj: any, path: any, index: number) => {
   if (index === path.length - 1) {
-    // eslint-disable-next-line no-param-reassign
     delete obj[path[index]];
     return;
   }
@@ -22,7 +21,6 @@ const toJSON = (schema: any) => {
     transform = schema.options.toJSON.transform;
   }
 
-  // eslint-disable-next-line no-param-reassign
   schema.options.toJSON = Object.assign(schema.options.toJSON || {}, {
     transform(doc: Document, ret: any, options: Record<string, any>) {
       Object.keys(schema.paths).forEach((path) => {
@@ -31,15 +29,10 @@ const toJSON = (schema: any) => {
         }
       });
 
-      // eslint-disable-next-line no-param-reassign
       ret.id = ret._id.toString();
-      // eslint-disable-next-line no-param-reassign
       delete ret._id;
-      // eslint-disable-next-line no-param-reassign
       delete ret.__v;
-      // eslint-disable-next-line no-param-reassign
       delete ret.createdAt;
-      // eslint-disable-next-line no-param-reassign
       delete ret.updatedAt;
       if (transform) {
         return transform(doc, ret, options);

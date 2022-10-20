@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+import { Server } from 'http';
 import app from './app';
 import config from './config/config';
 import logger from './modules/logger/logger';
 import seedDb from './seed';
 
-let server: any;
+let server: Server;
 mongoose.connect(config.mongoose.url).then(() => {
   logger.info('Connected to MongoDB');
   server = app.listen(config.port, () => {

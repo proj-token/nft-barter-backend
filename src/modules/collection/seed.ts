@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const collections = [
+const collections = [
   {
     title: 'Beanz',
     type: 'ERC721',
@@ -28,3 +27,5 @@ export const collections = [
     address: '0xF7C6300DC134B8Ab82c6dbdE9d35e54b2E4Bfcfd',
   },
 ];
+
+export default collections;

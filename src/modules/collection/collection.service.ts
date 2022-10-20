@@ -1,4 +1,4 @@
-import * as seedData from './seed';
+import seedCollections from './seed';
 import Collection from './collection.model';
 import { IOptions, QueryResult } from '../paginate/paginate';
 /**
@@ -15,5 +15,5 @@ export const queryCollections = async (filter: Record<string, any>, options: IOp
 export const populateAssetCollections = async (): Promise<any> => {
   const count = await Collection.estimatedDocumentCount();
   if (count > 0) return; // Already populated
-  Collection.insertMany(seedData.collections);
+  Collection.insertMany(seedCollections);
 };
